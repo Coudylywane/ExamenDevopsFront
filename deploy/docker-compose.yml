@@ -1,0 +1,24 @@
+# Compose de déploiement du frontend en production.
+# Positionné sur le serveur par la GitHub Action (dossier /opt/prod/apps/frontend).
+# L'image est injectée via le fichier .env (Image=ghcr.io/<owner>/frontend:latest).
+services:
+  frontend:
+    image: ${IMAGE}
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    networks:
+      - prod-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.frontend.rule=Host(`app.produitexamen.duckdns.org`)"
+      - "traefik.http.routers.frontend.entrypoints=websecure"
+      - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.frontend.middlewares=secure-headers"
+      - "traefik.http.services.frontend.loadbalancer.server.port=80"
+      - "traefik.docker.network=prod-net"
+
+networks:
+  prod-net:
+    external: true
+    name: prod-net
