@@ -14,7 +14,7 @@ services:
       - "traefik.http.routers.frontend.rule=Host(`app.produitexamen.duckdns.org`)"
       - "traefik.http.routers.frontend.entrypoints=websecure"
       - "traefik.http.routers.frontend.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.frontend.middlewares=secure-headers"
+      - "traefik.http.routers.frontend.middlewares=secure-headers@file"
       - "traefik.http.services.frontend.loadbalancer.server.port=80"
       - "traefik.docker.network=prod-net"
 
